@@ -1,5 +1,5 @@
 {
-  "name": "haiqing-wang-webdevspr2020",
+  "name": "haiqing-wang-pizza",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -8,9 +8,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.ccs.neu.edu/hwang1005/haiqing-wang-webdevspr2020.git"
+    "url": "https://github.com/haiqingwang1005/pizza-web.git"
   },
-  "author": "",
+  "author": "Haiqing Wang",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"

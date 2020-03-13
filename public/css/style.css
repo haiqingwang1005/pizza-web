@@ -7,6 +7,10 @@
     color: black;
 }
 
+.pizza_color {
+    color: white
+
+}
 .profile-container {
     min-height: 70vh;
     margin-top: 12rem;
@@ -79,7 +83,7 @@
     height: 20px;
 }
 .bg-image {
-    background-image: url("../images/4.jpeg");
+    background-image: url("../images/pizza_login1.jpg");
     background-size: cover;
     background-position: center;
 }
