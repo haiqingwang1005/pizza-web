@@ -8,34 +8,7 @@
 </head>
 <body>
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-        <a href="#">
-            <i class="fas fa-pizza-slice pizza_color"></i>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">WebLife
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="signup.html">Sign up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="profile.html">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.html">Log in</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div id="nav-menu"></div>
 
 <!-- Page Content -->
 <header>
@@ -82,8 +55,10 @@
 <!-- Page Content -->
 <section class="py-5">
     <div class="container">
-        <h1 class="font-weight-light">Pizza-Pizza</h1>
-        <p class="lead">It is pizza time!</p>
+        <h1 id="name_place" class="font-weight-light"></h1>
+        <div class="lead">
+            It is pizza time!
+        </div>
     </div>
 </section>
 
@@ -92,4 +67,34 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://kit.fontawesome.com/d362ac46d1.js" crossorigin="anonymous"></script>
+<script src="public/js/utils.js"></script>
+<script>
+    $('#nav-menu').load('nav.html');
+    const url = "http://localhost:9080/haiqingpizza/profile";
+    const namePlace = document.getElementById("name_place");
+    const auth = getAuthToken();
+    if (auth) {
+        fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                //'Content-Type': "application/json"
+                'Authorization': 'Bearer ' + auth
+            }
+        }).then((response) => {
+            let status = response.status;
+            console.log(status);
+            if (status >= 200 && status < 300) {
+                response.json().then((data) => {
+                    const name = data.firstname;
+                    if (name) {
+                        namePlace.innerText = `Hello ${name}! `;
+                    }
+                });
+            }
+        }).catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+</script>
 </html>

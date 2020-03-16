@@ -37,6 +37,10 @@ app.get('/post_create.html', function(req, res) {
     res.sendFile(__dirname + '/pages/post_create.html')
 });
 
+app.get('/nav.html', function(req, res) {
+    res.sendFile(__dirname + '/widget/nav.html')
+});
+
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))
 });
