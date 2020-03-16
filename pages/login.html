@@ -49,6 +49,9 @@
 					<div class="container">
 						<div class="row">
 							<div class="col-md-9 col-lg-8 mx-auto">
+								
+								<div id="error-title" class="alert alert-danger login-error-title" role="alert"></div>
+								<div id="success-title" class="alert alert-success login-success-title" role="alert"></div>
 								<h3 class="login-heading mb-4">Welcome back!</h3>
 								<form id="login_form">
 									<div class="form-label-group">
@@ -86,6 +89,27 @@
 <script src="https://kit.fontawesome.com/d362ac46d1.js" crossorigin="anonymous"></script>
 
 <script text="javascript">
+	function showError(msg) {
+		let element = document.getElementById('error-title'); 
+		element.style.display = 'block'; 
+		element.innerText = msg;
+	}
+	function hideError() {
+		let element = document.getElementById('error-title'); 
+		element.style.display = 'none'; 
+	}
+	function showSuccess() {
+		let element = document.getElementById('success-title'); 
+		element.style.display = 'block'; 
+		element.innerText = 'Successfully sign in';
+	}
+	function hideSuccess() {
+		let element = document.getElementById('success-title'); 
+		element.style.display = 'none'; 
+	}
+	function redirectToHome() {
+		window.location.replace("/welcome.html");
+	}
 	$('#login_form').submit((e) => {
 		e.preventDefault();
 
@@ -97,22 +121,41 @@
 			"password": password
 		};
 		console.log(JSON.stringify(body));
-		$.ajax({
-			//contentType: "application/json",
-			type: "POST",
-			url: url,
-			dataType: "json",
-			data: body,
-			success: (data, statusText, xhr) => {
-				console.log(status);
+
+		fetch(url, {
+			method: 'POST',
+			mode: 'cors',
+			headers: {
+				'Content-Type': "application/json"
 			},
-			error: (xhr, statusText, errorThrown) => {
-				console.log(statusText);
-				console.log("SB SB");
-				console.log(xhr.responseJSON);
+			credentials: 'include',
+			body: JSON.stringify(body)
+		})
+  		.then((response) => {
+			const status = parseInt(response.status);
+			console.log(status);
+    		if (status >= 200 && status < 300) {
+				showSuccess();
+				hideError();
+				redirectToHome();
+			} else {
+				console.log('show error');
+				showError('Failed to sign in!');
+				hideSuccess();
 			}
+			return response.json();
+		})
+  		.then((data) => {
+    		console.log(data);
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			showError('Network error!');
+			hideSuccess();
 		});
 	});
+
+	
 </script>
 
 </html>

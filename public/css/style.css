@@ -89,7 +89,13 @@
 }
 
 .login-heading {
-    font-weight: 300;
+    font-weight: 250;
+}
+.login-error-title {
+    display:none;
+}
+.login-success-title {
+    display:none
 }
 
 .btn-login {
