@@ -55,6 +55,9 @@
 <!-- Page Content -->
 <section class="py-5">
     <div class="container">
+        <div id="login_place">
+            <h1 class="font-weight-light">Hello! <a href="/login.html">Please sign in</a></h1>
+        </div>
         <h1 id="name_place" class="font-weight-light"></h1>
         <div class="lead">
             It is pizza time!
@@ -70,8 +73,32 @@
 <script src="public/js/utils.js"></script>
 <script>
     $('#nav-menu').load('nav.html');
+
+    function showName(name) {
+        const namePlace = document.getElementById("name_place");
+        namePlace.style.display = 'block';
+        namePlace.innerText = `Hello ${name}! `;
+    }
+
+    function hideName() {
+        const namePlace = document.getElementById("name_place");
+        namePlace.style.display = 'none';
+    }
+
+    function hideLogin() {
+        const loginPlace = document.getElementById("login_place");
+        loginPlace.style.display = 'none';
+    }
+
+    function showLogin() {
+        const loginPlace = document.getElementById("login_place");
+        loginPlace.style.display = 'block';
+    }
+
     const url = "http://localhost:9080/haiqingpizza/profile";
-    const namePlace = document.getElementById("name_place");
+
+    showLogin();
+    hideName();
     const auth = getAuthToken();
     if (auth) {
         fetch(url, {
@@ -88,7 +115,8 @@
                 response.json().then((data) => {
                     const name = data.firstname;
                     if (name) {
-                        namePlace.innerText = `Hello ${name}! `;
+                        showName(name);
+                        hideLogin();
                     }
                 });
             }

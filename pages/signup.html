@@ -16,24 +16,36 @@
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                 <div class="card card-signin my-5">
                     <div class="card-body">
+                        <div id="error-title" class="alert alert-danger login-error-title" role="alert"></div>
+                        <div id="success-title" class="alert alert-success login-success-title" role="alert"></div>
                         <h5 class="card-title text-center">Sign Up</h5>
-                        <form class="form-signup">
+                        <form class="form-signup" id="signup_form">
                             <div class="form-label-group">
-                                <input type="text" id="username" class="form-control" placeholder="Name" required autofocus>
-                                <label for="username">Username</label>
+                                <input type="text" id="inputUsername" class="form-control" placeholder="" required autofocus>
+                                <label for="inputUsername">Username</label>
                             </div>
                             <div class="form-label-group">
-                                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
+                                <input type="email" id="inputEmail" class="form-control" placeholder="" required>
                                 <label for="inputEmail">Email address</label>
                             </div>
 
                             <div class="form-label-group">
-                                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                                <label for="inputPassword">Password</label>
+                                <input type="text" id="inputFirstName" class="form-control" placeholder="" required>
+                                <label for="inputFirstName">First name</label>
                             </div>
 
                             <div class="form-label-group">
-                                <input type="password" id="verifyPassword" class="form-control" placeholder="Verify Password" required>
+                                <input type="text" id="inputLastName" class="form-control" placeholder="" required>
+                                <label for="inputLastName">Last name</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="password" id="inputPassword" class="form-control" placeholder="" required>
+                                <label for="inputPassword">Password</label>
+                            </div>
+
+                            <div class="form-label-group" id="verifyPasswordDiv">
+                                <input type="password" id="verifyPassword" class="form-control" placeholder="" required onkeyup="showMismatch()">
                                 <label for="verifyPassword">Verify Password</label>
                             </div>
 
@@ -61,8 +73,104 @@
 <script>
     $('#nav-menu').load('nav.html');
 
-    const url = 'http://localhost:9080/haiqingpizza/register';
+    const passwordField = document.getElementById("inputPassword");
+    const verifyPasswordField = document.getElementById("verifyPassword");
 
+    function showMismatch() {
+        const password = passwordField.value;
+        const verifyPassword = verifyPasswordField.value;
+        if (password !== verifyPassword) {
+            verifyPasswordField.classList.add('border-danger');
+        } else {
+            verifyPasswordField.classList.remove('border-danger');
+        }
+    }
+
+    function showError(status) {
+        let element = document.getElementById('error-title');
+        element.style.display = 'block';
+        let msg;
+        if (status === 409) {
+            msg = "Account or email already exists";
+        } else if (status === -1) {
+            msg = "Network error"
+        } else {
+            msg = "Failed to sign up!";
+        }
+        element.innerText = msg;
+    }
+    function hideError() {
+        let element = document.getElementById('error-title');
+        element.style.display = 'none';
+    }
+
+    function showSuccess() {
+        let element = document.getElementById('success-title');
+        element.style.display = 'block';
+        element.innerText = 'Successfully sign up';
+    }
+
+    function hideSuccess() {
+        let element = document.getElementById('success-title');
+        element.style.display = 'none';
+    }
+
+    function redirectToHome() {
+        window.location.replace("/welcome.html");
+    }
+
+    document.addEventListener("click", showMismatch);
+
+
+    $('#signup_form').submit((e) => {
+        e.preventDefault();
+        const url = 'http://localhost:9080/haiqingpizza/register';
+        const username = document.getElementById("inputUsername").value;
+        const email = document.getElementById("inputEmail").value;
+        const password = document.getElementById("inputPassword").value;
+        const verifyPassword = document.getElementById("verifyPassword").value;
+        const first = document.getElementById("inputFirstName").value;
+        const last = document.getElementById("inputLastName").value;
+        if (password !== verifyPassword) {
+            showMismatch();
+            showError("Please verify your password!")
+        } else {
+
+            const body = {
+                "email": email,
+                "firstname": first,
+                "lastname": last,
+                "password": password,
+                "username": username
+            };
+            fetch(url, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                credentials: 'include',
+                body: JSON.stringify(body)
+            }).then((response) => {
+                let status = response.status;
+                console.log(status);
+                if (status >= 200 && status < 300) {
+                    console.log('Sign up successfully');
+                    showSuccess();
+                    hideError();
+                    redirectToHome();
+                } else {
+                    console.log('Signup error');
+                    showError(status);
+                    hideSuccess();
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+                showError(-1);
+                hideSuccess();
+            });
+        }
+    });
     
 </script>
 </html>

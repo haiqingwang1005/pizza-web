@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 9090));
 
 app.use('/public', express.static(__dirname + '/public'));
 
@@ -19,6 +19,10 @@ app.get('/login.html', function(req, res) {
 
 app.get('/signup.html', function(req, res) {
     res.sendFile(__dirname + '/pages/signup.html');
+});
+
+app.get('/stores.html', function(req, res) {
+    res.sendFile(__dirname + '/pages/stores.html');
 });
 
 app.get('/profile.html', function(req, res) {

@@ -89,7 +89,7 @@
 }
 
 .login-heading {
-    font-weight: 250;
+    font-weight: bold;
 }
 .login-error-title {
     display:none;
