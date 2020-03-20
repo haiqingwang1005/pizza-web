@@ -192,3 +192,9 @@
         color: #777;
     }
 }
+
+/* carousel-caption */
+.carousel-caption {
+    background: rgba(1, 0, 0, 0.5);
+}
+
