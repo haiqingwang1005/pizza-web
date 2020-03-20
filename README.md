@@ -1,6 +1,5 @@
-# haiqing-wang-webdevspr2020
+# Pizza front end
 
-Heroku: https://haiqing-wang-webdevspr2020.herokuapp.com/
 
 # Image/icons source:
 1. https://pixabay.com/
