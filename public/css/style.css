@@ -198,3 +198,23 @@
     background: rgba(1, 0, 0, 0.5);
 }
 
+.footer-text {
+    margin-left: 5px;
+}
+
+.store-card {
+    margin-top: 10vh;
+}
+
+.store-card-title {
+    font-weight: bold;
+}
+
+.welcome-body {
+    margin-bottom: 60px;
+}
+
+.welcome-spinner-container {
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+}

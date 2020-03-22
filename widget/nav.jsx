@@ -1,6 +1,7 @@
 import '../public/css/style.css';
 
 import React, { useState } from 'react';
+
 import {
     Collapse,
     Navbar,
@@ -13,7 +14,6 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-    NavbarText
 } from 'reactstrap';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faPizzaSlice } from '@fortawesome/free-solid-svg-icons'
@@ -60,7 +60,6 @@ const PizzaNav = (props) => {
                     </Nav>
                 </Collapse>
             </Navbar>
-
         </div>
     );
 };

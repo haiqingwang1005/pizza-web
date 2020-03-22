@@ -8,6 +8,9 @@
     "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/haiqingwang1005/pizza-web.git"
@@ -25,6 +28,10 @@
     "react-bootstrap": "^1.0.0-beta.17",
     "react-dom": "^16.13.1",
     "reactstrap": "^8.4.1",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "swr": "^0.1.18"
+  },
+  "devDependencies": {
+    "eslint-config-react-app": "^5.2.0"
   }
 }
