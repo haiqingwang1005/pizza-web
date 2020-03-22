@@ -12,12 +12,13 @@ import {
     Input,
     Button,
     FormGroup,
-    Label} from "reactstrap";
+    Label
+} from "reactstrap";
 
-const LoginPanel = (props) => {
+const SignUpPanel = (props) => {
     return (
         <Card className={"login-card"}>
-            <CardTitle className="login-heading">Welcome back!</CardTitle>
+            <CardTitle className="login-heading">Sign Up</CardTitle>
             <Form id="login_form">
                 <CardBody>
                     <Container>
@@ -31,18 +32,34 @@ const LoginPanel = (props) => {
                                 </FormGroup>
 
                                 <FormGroup className="form-label-group">
+                                    <Input type="email" id="inputEmail" className="form-control" placeholder=" "
+                                           required/>
+                                    <Label htmlFor="inputEmail">Email address</Label>
+                                </FormGroup>
+
+                                <FormGroup className="form-label-group">
+                                    <Input type="text" id="inputFirstName" className="form-control" placeholder=" "
+                                           required/>
+                                    <Label for="inputFirstName">First name</Label>
+                                </FormGroup>
+
+                                <FormGroup className="form-label-group">
+                                    <Input type="text" id="inputLastName" className="form-control" placeholder=" "
+                                           required/>
+                                    <Label for="inputLastName">Last name</Label>
+                                </FormGroup>
+
+                                <FormGroup className="form-label-group">
                                     <Input type="password" id="inputPassword" className="form-control" placeholder=" "
                                            required/>
                                     <Label for="inputPassword">Password</Label>
                                 </FormGroup>
 
-                                <FormGroup className="custom-control custom-checkbox mb-3">
-                                    <Input type="checkbox" className="custom-control-input" id="customCheck1"/>
-                                    <Label className="custom-control-label" for="customCheck1">
-                                        Remember password
-                                    </Label>
+                                <FormGroup className="form-label-group" id="verifyPasswordDiv">
+                                    <Input type="password" id="verifyPassword" className="form-control" placeholder=" "
+                                           required/>
+                                    <Label for="verifyPassword">Verify Password</Label>
                                 </FormGroup>
-
                             </Col>
                         </Row>
                     </Container>
@@ -55,10 +72,10 @@ const LoginPanel = (props) => {
                                     color="primary"
                                     className="btn-block login-btn text-uppercase font-weight-bold mb-2"
                                     type="submit">
-                                    Sign in
+                                    Sign up
                                 </Button>
                                 <div className="text-center">
-                                    <a className="small" href="/signup">New Customer?</a>
+                                    <a className="small" href="/login">Already have an account?</a>
                                 </div>
                             </Col>
                         </Row>
@@ -69,4 +86,4 @@ const LoginPanel = (props) => {
     );
 };
 
-export default LoginPanel;
+export default SignUpPanel;

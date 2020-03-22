@@ -5,7 +5,7 @@ import {Container, Row} from "reactstrap";
 
 const PizzaLayout = (props) => {
     return (
-        <div style={props.style}>
+        <div style={props.style} className={props.className}>
             <PizzaNav/>
             <Container className={"pizza-body"}>
                 {props.children}

@@ -203,11 +203,15 @@
     }
 }
 
+.login-background {
+    background-size: cover;
+}
 /* login end */
 
 
 .store-card {
     margin-top: 10vh;
+    z-index: -2;
 }
 
 .store-card-title {
@@ -216,6 +220,7 @@
 
 .pizza-body {
     margin-bottom: 60px;
+    min-height: 100vh;
 }
 
 .pizza-spinner-container {

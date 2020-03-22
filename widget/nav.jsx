@@ -35,7 +35,7 @@ const PizzaNav = (props) => {
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="ml-auto" navbar>
                         <NavItem>
-                            <NavLink href="/components/">Components</NavLink>
+                            <NavLink href="/login">Login</NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
