@@ -1,10 +1,8 @@
 import React from "react";
-import PizzaNav from "../widget/nav";
+import WelcomePage from "./welcome";
 
 export default function Index() {
     return (
-        <div>
-            <PizzaNav/>
-        </div>
+        <WelcomePage/>
     );
 }

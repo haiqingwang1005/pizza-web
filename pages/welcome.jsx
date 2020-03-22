@@ -1,11 +1,9 @@
-import PizzaNav from "../widget/nav";
-import PizzaCarousel from "../widget/carousel";
-import PizzaFooter from "../widget/footer";
 import React from "react";
+import PizzaCarousel from "../widget/carousel";
+import PizzaLayout from "../widget/pizza_layout";
 import StoreCards from "../widget/stores";
 import useSWR from 'swr';
 import pizza_backend_url from "../utils/pizza_url";
-import {Container} from "reactstrap";
 
 const items = [
     {
@@ -30,22 +28,21 @@ const items = [
 
 function storeFetcher(url) {
     return fetch(url).then(r => {
-        return  r.json();
+        return r.json();
     });
 }
 
-export default function Welcome() {
+export default function WelcomePage() {
 
-    const { data, error } = useSWR(pizza_backend_url + "/stores", storeFetcher);
-
+    const {data, error} = useSWR(pizza_backend_url + "/stores", storeFetcher);
+    let storeInfo = data;
+    if (error) {
+        storeInfo = undefined;
+    }
     return (
-        <div>
-            <PizzaNav/>
-            <Container className={"welcome-body"}>
-                <PizzaCarousel items={items}/>
-                <StoreCards storesInfo={data}/>
-            </Container>
-            <PizzaFooter/>
-        </div>
+        <PizzaLayout>
+            <PizzaCarousel items={items}/>
+            <StoreCards storesInfo={storeInfo}/>
+        </PizzaLayout>
     );
 }

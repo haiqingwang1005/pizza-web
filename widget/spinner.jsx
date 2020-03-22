@@ -4,7 +4,7 @@ import '../public/css/style.css'
 
 const PizzaSpinner = (props) => {
     return (
-        <Container className={"welcome-spinner-container"}>
+        <Container className={"pizza-spinner-container"}>
             <Row>
                 <Col className={"col-xs-12 text-center"}>
                     <Spinner type="grow" color="warning" />
