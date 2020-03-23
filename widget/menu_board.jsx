@@ -11,11 +11,10 @@ import {
 } from "reactstrap";
 import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCartPlus, faThumbsUp} from '@fortawesome/free-solid-svg-icons'
+import {faCartPlus, faStar} from '@fortawesome/free-solid-svg-icons'
 import pizza_backend_url from "../utils/pizza_url";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import PizzaSpinner from "./spinner";
-import PizzaLayout from "./pizza_layout";
 
 const getImageUrl = (name) => {
     return pizza_backend_url + '/toppings/image?name=' + name;
@@ -38,8 +37,14 @@ const MenuIcon = (props) => {
 const MenuItem = (props) => {
     return (
         <Card className={"pizza-menu-item"}>
-            <CardHeader className={"text-uppercase"}>
-                {props.topping.name}
+            <CardHeader className={"text-uppercase text-center"}>
+                <div className={"float-left"}>
+                    {props.topping.name}
+                </div>
+                {
+                    props.topping.isPremium &&
+                    <MenuIcon iconSrc={faStar} words={"Chief Recommends!"} position={"float-right"}/>
+                }
             </CardHeader>
             <CardImg width="100%" src={getImageUrl(props.topping.name)} alt="Card image cap"/>
             <CardBody>
@@ -48,10 +53,6 @@ const MenuItem = (props) => {
                 </CardText>
             </CardBody>
             <CardFooter className={"text-center"}>
-                {
-                    props.topping.isPremium &&
-                    <MenuIcon iconSrc={faThumbsUp} words={"Chief Recommends!"} position={"float-left"}/>
-                }
                 <MenuIcon iconSrc={faCartPlus} words={"Add to Chart"} position={"float-right"}/>
             </CardFooter>
         </Card>
