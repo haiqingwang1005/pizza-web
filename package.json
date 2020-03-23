@@ -32,6 +32,7 @@
     "swr": "^0.1.18"
   },
   "devDependencies": {
-    "eslint-config-react-app": "^5.2.0"
+    "eslint-config-react-app": "^5.2.0",
+    "react-svg-loader": "^3.0.3"
   }
 }

@@ -36,13 +36,13 @@ const StoreCard = (props) => {
 const StoreCards = (props) => {
     if (props.storesInfo) {
         return (
-            <Container className={"store-container"}>
+            <Container>
                 <Row>
                     {
                         props.storesInfo.map((item) => {
                             return (
                                 <Col sm="12" md="6" lg="4" key={item.id}>
-                                    <StoreCard key={item.id} storeInfo={item}/>
+                                    <StoreCard storeInfo={item}/>
                                 </Col>
                             )
                         })
