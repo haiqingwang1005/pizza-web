@@ -11,12 +11,28 @@ import {
 } from "reactstrap";
 import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
+import {faCartPlus, faThumbsUp} from '@fortawesome/free-solid-svg-icons'
 import pizza_backend_url from "../utils/pizza_url";
-import {GlutenFree} from '../icons/gluten-free';
+import {OverlayTrigger, Tooltip} from "react-bootstrap";
+import PizzaSpinner from "./spinner";
+import PizzaLayout from "./pizza_layout";
 
 const getImageUrl = (name) => {
     return pizza_backend_url + '/toppings/image?name=' + name;
+};
+
+const MenuIcon = (props) => {
+    return (
+        <div>
+            <OverlayTrigger key={"right"} placement={"right"} overlay={
+                <Tooltip id={"tooltip-right"}>
+                    {props.words}
+                </Tooltip>
+            }>
+                <FontAwesomeIcon icon={props.iconSrc} className={props.position}/>
+            </OverlayTrigger>
+        </div>
+    );
 };
 
 const MenuItem = (props) => {
@@ -29,12 +45,14 @@ const MenuItem = (props) => {
             <CardBody>
                 <CardText>
                     {props.topping.description}
-
                 </CardText>
             </CardBody>
-            <CardFooter className={"text-right"}>
-                <GlutenFree/>
-                <FontAwesomeIcon icon={faCartPlus}  />
+            <CardFooter className={"text-center"}>
+                {
+                    props.topping.isPremium &&
+                    <MenuIcon iconSrc={faThumbsUp} words={"Chief Recommends!"} position={"float-left"}/>
+                }
+                <MenuIcon iconSrc={faCartPlus} words={"Add to Chart"} position={"float-right"}/>
             </CardFooter>
         </Card>
     );
@@ -67,4 +85,35 @@ const MenuSection = (props) => {
     );
 };
 
-export default MenuSection;
+const categorizeToppings = (toppings) => {
+    const res = [];
+    const meat = [];
+    const vege = [];
+    toppings.map((item) => {
+        if (item.toppingType === 'vegetable') {
+            vege.push(item);
+        }
+        if (item.toppingType === 'meat') {
+            meat.push(item);
+        }
+    });
+    res.push({key: "Meat", toppings: meat});
+    res.push({key: "Vegetable", toppings: vege});
+    return res;
+};
+
+const MenuBoard = (props) => {
+    const toppingsInfo = props.toppingsInfo;
+    if (!toppingsInfo) {
+        return (<PizzaSpinner/>);
+    } else {
+        const categorized = categorizeToppings(toppingsInfo);
+        return (
+            categorized.map((item) => {
+                return <MenuSection toppings={item.toppings} key={item.key} title={item.key}/>
+            })
+        );
+    }
+};
+
+export default MenuBoard;
