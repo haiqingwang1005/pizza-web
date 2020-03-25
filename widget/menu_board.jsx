@@ -7,34 +7,25 @@ import {
     CardBody,
     CardImg,
     CardText,
-    CardFooter
+    CardFooter,
+    Button
 } from "reactstrap";
-import React from "react";
+import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartPlus, faStar} from '@fortawesome/free-solid-svg-icons'
 import pizza_backend_url from "../utils/pizza_url";
-import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import PizzaSpinner from "./spinner";
+import Hover from "./hover";
+import MenuModal from "./menu_modal";
+import PizzaChart from "./shop_cart";
 
 const getImageUrl = (name) => {
     return pizza_backend_url + '/toppings/image?name=' + name;
 };
 
-const MenuIcon = (props) => {
-    return (
-        <div>
-            <OverlayTrigger key={"right"} placement={"right"} overlay={
-                <Tooltip id={"tooltip-right"}>
-                    {props.words}
-                </Tooltip>
-            }>
-                <FontAwesomeIcon icon={props.iconSrc} className={props.position}/>
-            </OverlayTrigger>
-        </div>
-    );
-};
-
 const MenuItem = (props) => {
+    const [show, setShow] = useState(false);
+
     return (
         <Card className={"pizza-menu-item"}>
             <CardHeader className={"text-uppercase text-center"}>
@@ -43,7 +34,9 @@ const MenuItem = (props) => {
                 </div>
                 {
                     props.topping.isPremium &&
-                    <MenuIcon iconSrc={faStar} words={"Chief Recommends!"} position={"float-right"}/>
+                    <Hover words={"Chief Recommends!"}>
+                        <FontAwesomeIcon className={"float-right"} icon={faStar}/>
+                    </Hover>
                 }
             </CardHeader>
             <CardImg width="100%" src={getImageUrl(props.topping.name)} alt="Card image cap"/>
@@ -53,8 +46,13 @@ const MenuItem = (props) => {
                 </CardText>
             </CardBody>
             <CardFooter className={"text-center"}>
-                <MenuIcon iconSrc={faCartPlus} words={"Add to Chart"} position={"float-right"}/>
+                <Hover words={"Add to Chart"}>
+                    <a onClick={() => setShow(true)}>
+                        <FontAwesomeIcon icon={faCartPlus} words={"Add to Chart"}/>
+                    </a>
+                </Hover>
             </CardFooter>
+            <MenuModal show={show} onHide={() => setShow(false)} topping={props.topping}/>
         </Card>
     );
 };
@@ -110,9 +108,16 @@ const MenuBoard = (props) => {
     } else {
         const categorized = categorizeToppings(toppingsInfo);
         return (
-            categorized.map((item) => {
-                return <MenuSection toppings={item.toppings} key={item.key} title={item.key}/>
-            })
+            <div>
+                <PizzaChart/>
+                {
+                    categorized.map((item) => {
+                        return <MenuSection toppings={item.toppings} key={item.key} title={item.key}/>
+                    })
+                }
+
+            </div>
+
         );
     }
 };

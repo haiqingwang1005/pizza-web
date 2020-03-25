@@ -1,3 +1,5 @@
+import '../public/css/style.css';
+
 import React from "react";
 
 import PizzaLayout from "../widget/pizza_layout";
