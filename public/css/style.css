@@ -268,7 +268,7 @@
 }
 
 /* amount picker */
-.pizza-amount-picker-arrow {
+.pizza-clickable {
     cursor: pointer;
 }
 
