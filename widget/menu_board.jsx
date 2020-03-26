@@ -8,7 +8,6 @@ import {
     CardImg,
     CardText,
     CardFooter,
-    Button
 } from "reactstrap";
 import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -52,7 +51,9 @@ const MenuItem = (props) => {
                     </a>
                 </Hover>
             </CardFooter>
-            <MenuModal show={show} onHide={() => setShow(false)} topping={props.topping}/>
+            <MenuModal show={show}
+                       onHide={() => setShow(false)}
+                       topping={props.topping}/>
         </Card>
     );
 };
@@ -112,7 +113,9 @@ const MenuBoard = (props) => {
                 <PizzaChart/>
                 {
                     categorized.map((item) => {
-                        return <MenuSection toppings={item.toppings} key={item.key} title={item.key}/>
+                        return <MenuSection toppings={item.toppings}
+                                            key={item.key}
+                                            title={item.key}/>
                     })
                 }
 

@@ -6,21 +6,16 @@ import PizzaLayout from "../widget/pizza_layout";
 import MenuBoard from "../widget/menu_board";
 
 import useSWR from "swr";
-import pizza_backend_url from "../utils/pizza_url";
-
-function toppingsFetcher(url) {
-    return fetch(url).then(r => {
-        return r.json();
-    });
-}
-
+import pizza_backend_url, {fetcher} from "../utils/pizza_url";
 
 const Menu = (props) => {
-    const {data, error} = useSWR(pizza_backend_url + "/toppings", toppingsFetcher);
-    let toppingsInfo = data;
-    if (error) {
+    const {data: toppingData, error: toppingError} = useSWR(pizza_backend_url + "/toppings", fetcher);
+
+    let toppingsInfo = toppingData;
+    if (toppingError) {
         toppingsInfo = undefined;
     }
+
     return (
         <PizzaLayout>
             <MenuBoard toppingsInfo={toppingsInfo}/>

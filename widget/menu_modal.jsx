@@ -19,9 +19,11 @@ import {
 
 import {GlutenFree} from "../icons/gluten-free";
 import {Accordion} from "react-bootstrap";
-import pizza_backend_url from "../utils/pizza_url";
+import pizza_backend_url, {fetcher} from "../utils/pizza_url";
 import SizeIcon from "./size_icon";
 import AmountPicker from "./amount_picker";
+import useSWR from "swr";
+import PizzaSpinner from "./spinner";
 
 const crust = [
     {
@@ -125,17 +127,26 @@ const CrustItem = (props) => {
 };
 
 const MenuCrust = (props) => {
-    return (
-        <MenuAccordion headText={"Choose Crust"}>
-            {
-                crust.map((item) => {
-                    return (
-                        <CrustItem crust={item} key={item.name}/>
-                    );
-                })
-            }
-        </MenuAccordion>
-    );
+    const {data: crustData, error: crustError} = useSWR(pizza_backend_url + "/crusts", fetcher);
+    let crustInfo = crustData;
+    if (crustError) {
+        crustInfo = undefined;
+    }
+    if (!crustInfo) {
+        return <PizzaSpinner/>
+    } else {
+        return (
+            <MenuAccordion headText={"Choose Crust"}>
+                {
+                    crustInfo.map((item) => {
+                        return (
+                            <CrustItem crust={item} key={item.name}/>
+                        );
+                    })
+                }
+            </MenuAccordion>
+        );
+    }
 };
 
 const SizeItem = (props) => {
@@ -152,15 +163,25 @@ const SizeItem = (props) => {
 };
 
 const MenuSize = (props) => {
-    return (
-        <MenuAccordion headText={"Choose Size"}>
-            {
-                sizeData.map((item) =>
-                    <SizeItem sizeData={item} key={item.tag}/>
-                )
-            }
-        </MenuAccordion>
-    );
+    const {data: sizeData, error: sizeError} = useSWR(pizza_backend_url + "/pizzaSizes", fetcher);
+    let sizeInfo = sizeData;
+    if (sizeError) {
+        sizeInfo = undefined;
+    }
+
+    if (!sizeInfo) {
+        return <PizzaSpinner/>
+    } else {
+        return (
+            <MenuAccordion headText={"Choose Size"}>
+                {
+                    sizeInfo.map((item) =>
+                        <SizeItem sizeData={item} key={item.tag}/>
+                    )
+                }
+            </MenuAccordion>
+        );
+    }
 };
 
 const MenuNumber = (props) => {
@@ -169,11 +190,12 @@ const MenuNumber = (props) => {
             <AmountPicker className={"pizza-amount-picker-body"}/>
         </MenuAccordion>
     );
-};
+}
 
 const MenuModal = (props) => {
     let show = props.show;
     const onHide = props.onHide;
+
     return (
         <div>
             <Modal show={show} onHide={onHide} size={"xl"}>
@@ -190,6 +212,7 @@ const MenuModal = (props) => {
             </Modal>
         </div>
     );
+
 };
 
 export default MenuModal;
