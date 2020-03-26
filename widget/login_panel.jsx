@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import '../public/css/style.css'
 import {
     Card,
@@ -12,13 +12,54 @@ import {
     Input,
     Button,
     FormGroup,
-    Label} from "reactstrap";
+    Label
+} from "reactstrap";
+import Link from "next/link";
+import sanitize from "../utils/sanitize";
+import {pizzaPostRequest} from "../utils/pizza_url";
+import {FailTitle} from "./login_alert";
+import Router from 'next/router'
+
 
 const LoginPanel = (props) => {
+
+    let [loginFail, setLoginFail] = useState({isFailed: false, message: ''});
+
+    const inputUsername = React.createRef();
+    const inputPassword = React.createRef();
+
+    const login = (event) => {
+        event.preventDefault();
+        const password = sanitize(inputPassword.current.value);
+        const username = sanitize(inputUsername.current.value);
+
+        const body = {
+            "password": password,
+            "username": username
+        };
+
+        pizzaPostRequest('/signin',
+            body,
+            (status, data) => {
+                console.log('Login successfully');
+                setLoginFail({isFailed: false, message: ''});
+                Router.push('/welcome');
+            },
+            (status, data) => {
+                console.log('Login error');
+                setLoginFail({isFailed: true, message: 'Invalid username or password'});
+            },
+            (error) => {
+                console.error('Error:', error);
+                setLoginFail({isFailed: true, message: 'Network error'});
+            });
+    };
+
     return (
         <Card className={"login-card"}>
+            {loginFail.isFailed && <FailTitle message={loginFail.message}/>}
             <CardTitle className="login-heading">Welcome back!</CardTitle>
-            <Form id="login_form">
+            <Form id="login_form" onSubmit={login}>
                 <CardBody>
                     <Container>
                         <Row>
@@ -26,13 +67,15 @@ const LoginPanel = (props) => {
 
                                 <FormGroup className={"form-label-group"}>
                                     <Input type="text" id="inputUsername" className={"form-control"} placeholder=" "
-                                           required/>
+                                           required
+                                           innerRef={inputUsername}/>
                                     <Label for="inputUsername">Username</Label>
                                 </FormGroup>
 
                                 <FormGroup className="form-label-group">
                                     <Input type="password" id="inputPassword" className="form-control" placeholder=" "
-                                           required/>
+                                           required
+                                           innerRef={inputPassword}/>
                                     <Label for="inputPassword">Password</Label>
                                 </FormGroup>
 
@@ -54,11 +97,13 @@ const LoginPanel = (props) => {
                                 <Button
                                     color="primary"
                                     className="btn-block login-btn text-uppercase font-weight-bold mb-2"
-                                    type="submit">
+                                    type={"submit"}>
                                     Sign in
                                 </Button>
                                 <div className="text-center">
-                                    <a className="small" href="/signup">New Customer?</a>
+                                    <Link href="/signup">
+                                        <a className="small">New Customer?</a>
+                                    </Link>
                                 </div>
                             </Col>
                         </Row>

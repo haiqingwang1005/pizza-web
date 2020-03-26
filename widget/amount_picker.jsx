@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretLeft, faCaretRight} from '@fortawesome/free-solid-svg-icons'
-import {Table} from "react-bootstrap";
 import {Col, Container, Row} from "reactstrap";
 
 const AmountPicker = (props) => {
@@ -22,15 +21,19 @@ const AmountPicker = (props) => {
         <Container className={props.className}>
             <Row>
                 <Col xs="4">
-                    <FontAwesomeIcon icon={faCaretLeft} size={"2x"}
-                                     onClick={minusOne} className={"pizza-amount-picker-arrow"}/>
+                    <FontAwesomeIcon icon={faCaretLeft}
+                                     size={"2x"}
+                                     onClick={minusOne}
+                                     className={"pizza-clickable"}/>
                 </Col>
                 <Col xs="4" className={"noselect"}>
                     {amount}
                 </Col>
-                <Col xs="4" className={"pizza-amount-picker-arrow"}>
-                    <FontAwesomeIcon icon={faCaretRight} size={"2x"}
-                                     onClick={plusOne}/>
+                <Col xs="4">
+                    <FontAwesomeIcon icon={faCaretRight}
+                                     size={"2x"}
+                                     onClick={plusOne}
+                                     className={"pizza-clickable"}/>
                 </Col>
             </Row>
         </Container>

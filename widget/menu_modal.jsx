@@ -25,56 +25,6 @@ import AmountPicker from "./amount_picker";
 import useSWR from "swr";
 import PizzaSpinner from "./spinner";
 
-const crust = [
-    {
-        "id": "5e7abaa6438f549d5374bb75",
-        "isGlutenFree": true,
-        "name": "hand_toasted",
-        "description": "This is hand toasted dough."
-    },
-    {
-        "id": "5e7abaa6438f549d5374bb76",
-        "isGlutenFree": false,
-        "name": "whole_wheat",
-        "description": "This is whole wheat dough."
-    },
-    {
-        "id": "5e7abaa6438f549d5374bb77",
-        "isGlutenFree": false,
-        "name": "thin_crisp",
-        "description": "This is thin crispy dough."
-    },
-    {
-        "id": "5e7abaa6438f549d5374bb74",
-        "isGlutenFree": true,
-        "name": "original_pan",
-        "description": "This is original pan dough."
-    }
-];
-
-const sizeData = [
-    {
-        "id": "5e7aba2d438f5493af7ae39d",
-        "tag": "small",
-        "inch": 11,
-        "numberOfSlices": 8,
-        "caloriesPerSlice": 190
-    },
-    {
-        "id": "5e7aba2d438f5493af7ae39e",
-        "tag": "regular",
-        "inch": 13,
-        "numberOfSlices": 8,
-        "caloriesPerSlice": 280
-    },
-    {
-        "id": "5e7aba2d438f5493af7ae39f",
-        "tag": "large",
-        "inch": 17,
-        "numberOfSlices": 12,
-        "caloriesPerSlice": 290
-    }
-];
 const getImageUrl = (name) => {
     return pizza_backend_url + '/crusts/image?name=' + name;
 };
@@ -190,7 +140,7 @@ const MenuNumber = (props) => {
             <AmountPicker className={"pizza-amount-picker-body"}/>
         </MenuAccordion>
     );
-}
+};
 
 const MenuModal = (props) => {
     let show = props.show;

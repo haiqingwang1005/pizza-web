@@ -46,7 +46,7 @@ const MenuItem = (props) => {
             </CardBody>
             <CardFooter className={"text-center"}>
                 <Hover words={"Add to Chart"}>
-                    <a onClick={() => setShow(true)}>
+                    <a className={"pizza-clickable"} onClick={() => setShow(true)}>
                         <FontAwesomeIcon icon={faCartPlus} words={"Add to Chart"}/>
                     </a>
                 </Hover>

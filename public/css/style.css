@@ -12,6 +12,7 @@
 .pizza_color {
     color: white
 }
+
 .profile-container {
     min-height: 70vh;
     margin-top: 12rem;
@@ -20,15 +21,17 @@
 .post1-container {
     margin-top: 4rem;
 }
+
 .submitter_name {
     font-weight: bold;
 }
+
 .submitter_date {
     font-size: x-small;
 }
 
 .post-link {
-    color: rgb(24,24,24);
+    color: rgb(24, 24, 24);
     font-family: 'Roboto', sans-serif;
     font-weight: normal;
     font-size: 1.5rem;
@@ -46,21 +49,25 @@
     color: ivory;
     font-size: 5rem;
 }
+
 .btn-login:visited {
     color: ivory;
 }
+
 .btn-login:hover {
     color: ivory;
 }
 
 .small {
-    color: rgb(24,24,24);
+    color: rgb(24, 24, 24);
 }
+
 .small:visited {
-    color: rgb(24,24,24);
+    color: rgb(24, 24, 24);
 }
+
 .small:hover {
-    color: rgb(24,24,24);
+    color: rgb(24, 24, 24);
 }
 
 .welcome,
@@ -80,10 +87,11 @@
 }
 
 .login-error-title {
-    display:none;
+    display: none;
 }
+
 .login-success-title {
-    display:none
+    display: none
 }
 
 /* carousel-caption */
@@ -95,6 +103,7 @@
 .footer-text {
     margin-left: 5px;
 }
+
 /* login */
 .login-heading {
     font-weight: bold;
@@ -115,6 +124,11 @@
     padding: 0.75rem 1rem;
     border-radius: 2rem;
 }
+.login-input-error,
+.login-input-error:focus {
+    box-shadow: 0 1px 1px rgba(255, 0, 0, 0.075) inset, 0 0 8px rgba(255, 0, 0, 0.5);
+    border-color: red;
+}
 
 .pizza-login-image {
     background-size: cover;
@@ -126,14 +140,14 @@
     margin-bottom: 1rem;
 }
 
-.form-label-group>input,
-.form-label-group>label {
+.form-label-group > input,
+.form-label-group > label {
     padding: var(--input-padding-y) var(--input-padding-x);
     height: auto;
     border-radius: 2rem;
 }
 
-.form-label-group>label {
+.form-label-group > label {
     position: absolute;
     top: 0;
     left: 0;
@@ -175,7 +189,7 @@
     padding-bottom: calc(var(--input-padding-y) / 3);
 }
 
-.form-label-group input:not(:placeholder-shown)~label {
+.form-label-group input:not(:placeholder-shown) ~ label {
     padding-top: calc(var(--input-padding-y) / 3);
     padding-bottom: calc(var(--input-padding-y) / 3);
     font-size: 12px;
@@ -186,9 +200,10 @@
 -------------------------------------------------- */
 
 @supports (-ms-ime-align: auto) {
-    .form-label-group>label {
+    .form-label-group > label {
         display: none;
     }
+
     .form-label-group input::-ms-input-placeholder {
         color: #777;
     }
@@ -199,9 +214,10 @@
 
 @media all and (-ms-high-contrast: none),
 (-ms-high-contrast: active) {
-    .form-label-group>label {
+    .form-label-group > label {
         display: none;
     }
+
     .form-label-group input:-ms-input-placeholder {
         color: #777;
     }
@@ -210,6 +226,7 @@
 .login-background {
     background-size: cover;
 }
+
 /* login end */
 
 /* store style */
@@ -229,6 +246,7 @@
     margin-bottom: 60px;
     min-height: 100vh;
 }
+
 /* end pizza whole style */
 
 /* pizza spinner */
@@ -236,6 +254,7 @@
     margin-top: 10vh;
     margin-bottom: 10vh;
 }
+
 /* end pizza spinner */
 
 /* menu style */
@@ -312,6 +331,7 @@
     -khtml-user-select: none; /* Konqueror HTML */
     -moz-user-select: none; /* Old versions of Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                     supported by Chrome, Opera and Firefox */
 }
