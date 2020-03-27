@@ -8,18 +8,20 @@ export function fetcher(url) {
     });
 }
 
-export function pizzaPostRequest(path, bodyObj, handleSuccess, handleFail, handleError) {
+function pizzaRequest(path, verb, header, body, isCredential, handleSuccess, handleFail, handleError) {
+    const initObj = {};
+    initObj.method = verb;
+    initObj.mode = 'cors';
+    initObj.headers = header;
+    if (body) {
+        initObj.body = JSON.stringify(body);
+    }
+    if (isCredential) {
+        initObj.credentials = 'include'
+    }
+
     fetch(
-        pizza_backend_url + path,
-        {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': "application/json"
-            },
-            credentials: 'include',
-            body: JSON.stringify(bodyObj)
-        })
+        pizza_backend_url + path, initObj)
         .then((response) => {
             const statusPromise = new Promise((resolve, reject) => {
                 resolve({status: response.status});
@@ -29,14 +31,49 @@ export function pizzaPostRequest(path, bodyObj, handleSuccess, handleFail, handl
         .then((response) => {
             const status = response[0].status;
             const text = response[1];
-            const data = text.length === 0 ? {}: JSON.parse(text);
+            const data = text.length === 0 ? {} : JSON.parse(text);
             if (status >= 200 && status < 300) {
-                handleSuccess(status, data);
+                if (typeof handleSuccess === 'function') {
+                    handleSuccess(status, data);
+                }
             } else {
-                handleFail(status, data);
+                if (typeof handleFail === 'function') {
+                    handleFail(status, data);
+                }
             }
+            return data;
         })
         .catch((error) => {
-            handleError(error);
+            if (typeof handleError === "function") {
+                handleError(error);
+            }
         });
+}
+
+export function pizzaGetRequest(path, token, handleSuccess, handleFail, handleError) {
+    pizzaRequest(path,
+        'GET',
+        {
+            'Authorization': 'Bearer ' + token
+        },
+        undefined,
+        false,
+        handleSuccess,
+        handleFail,
+        handleError
+    );
+}
+
+export function pizzaPostRequest(path, bodyObj, handleSuccess, handleFail, handleError) {
+    pizzaRequest(path,
+        'POST',
+        {
+            'Content-Type': "application/json"
+        },
+        bodyObj,
+        true,
+        handleSuccess,
+        handleFail,
+        handleError
+    );
 }

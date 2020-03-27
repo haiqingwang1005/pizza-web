@@ -9,6 +9,5 @@ export default function sanitize(str) {
         "`": "&grave;"
     };
     const reg = /[&<>"'/]/ig;
-    str = str.toLowerCase();
     return str.replace(reg, (match)=>(map[match]));
 };

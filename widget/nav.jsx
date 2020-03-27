@@ -1,6 +1,6 @@
 import '../public/css/style.css';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 
 import {
@@ -18,16 +18,57 @@ import {
 } from 'reactstrap';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPizzaSlice} from '@fortawesome/free-solid-svg-icons'
-import getAuthToken from "../utils/token_utils";
+import {pizzaGetRequest} from "../utils/pizza_url";
+import { useCookies } from "react-cookie";
 
-const isCookiesAvailable = () => {
-    const token = getAuthToken();
-    return !!token;
+const NamePlace = (props) => {
+    const [name, setName] = useState('');
+    useEffect(() => {
+        pizzaGetRequest('/profile', props.token,
+            (status, data) => {
+                console.log(data.firstname);
+                setName(data.firstname);
+            },
+            (status, data) => {
+                console.error(`fail to get name ${data}`);
+            },
+            (error) => {
+                console.error(error);
+            });
+    });
+
+    return (
+        <span>
+            {`Hello, ${name}`}
+        </span>
+    );
 };
 
 const UserNav = (props) => {
-    if (props.isSignedIn) {
-        console.log('Not sign in');
+    if (props.token) {
+        return (
+            <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                    <NamePlace token={props.token}/>
+                </DropdownToggle>
+                <DropdownMenu right>
+                    <DropdownItem>
+                        Option 1
+                    </DropdownItem>
+                    <DropdownItem>
+                        Option 2
+                    </DropdownItem>
+                    <DropdownItem divider/>
+                    <DropdownItem onClick={() => {
+                        console.log('sign out');
+                        props.remove('token');
+                    }}>
+                        Sign out
+                    </DropdownItem>
+                </DropdownMenu>
+            </UncontrolledDropdown>
+        );
+    } else {
         return (
             <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
@@ -47,33 +88,19 @@ const UserNav = (props) => {
                 </DropdownMenu>
             </UncontrolledDropdown>
         );
-    } else {
-        console.log('already sign in');
-        return (
-            <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                    Options
-                </DropdownToggle>
-                <DropdownMenu right>
-                    <DropdownItem>
-                        Option 1
-                    </DropdownItem>
-                    <DropdownItem>
-                        Option 2
-                    </DropdownItem>
-                    <DropdownItem divider/>
-                    <DropdownItem>
-                        Reset
-                    </DropdownItem>
-                </DropdownMenu>
-            </UncontrolledDropdown>
-        );
     }
 };
 
 const PizzaNav = (props) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [token, setToken] = useState(undefined);
     const toggle = () => setIsOpen(!isOpen);
+
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+
+    useEffect(() => {
+        setToken(cookies.token);
+    });
 
     return (
         <div>
@@ -96,21 +123,12 @@ const PizzaNav = (props) => {
                                 <NavLink>Menu</NavLink>
                             </Link>
                         </NavItem>
-                        <UserNav isSignedIn={props.isSignedIn}/>
+                        <UserNav token={token} remove={removeCookie}/>
                     </Nav>
                 </Collapse>
             </Navbar>
         </div>
     );
 };
-
-PizzaNav.getInitialProps = async function() {
-    const isSignedIn = isCookiesAvailable();
-
-    return {
-        isSignedIn: isSignedIn
-    };
-};
-
 
 export default PizzaNav;
