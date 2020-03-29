@@ -7,6 +7,9 @@ export function fetcher(url) {
         return r.json();
     });
 }
+export function getImageUrl(imagePath) {
+    return pizza_backend_url + imagePath
+}
 
 function pizzaRequest(path, verb, header, body, isCredential, handleSuccess, handleFail, handleError) {
     const initObj = {};

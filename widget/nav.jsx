@@ -19,7 +19,7 @@ import {
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPizzaSlice} from '@fortawesome/free-solid-svg-icons'
 import {pizzaGetRequest} from "../utils/pizza_url";
-import { useCookies } from "react-cookie";
+import {useCookies} from "react-cookie";
 
 const NamePlace = (props) => {
     const [name, setName] = useState('');
@@ -53,10 +53,14 @@ const UserNav = (props) => {
                 </DropdownToggle>
                 <DropdownMenu right>
                     <DropdownItem>
-                        Option 1
+                        <Link href={"/"}>
+                            <a>Shop Cart</a>
+                        </Link>
                     </DropdownItem>
                     <DropdownItem>
-                        Option 2
+                        <Link href={"/"}>
+                            <a>My Orders</a>
+                        </Link>
                     </DropdownItem>
                     <DropdownItem divider/>
                     <DropdownItem onClick={() => {

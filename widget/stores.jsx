@@ -12,14 +12,14 @@ import {
 import PizzaSpinner from "./spinner";
 import pizza_backend_url from "../utils/pizza_url";
 
-const getImageUrl = (id) => {
-    return pizza_backend_url + '/stores/image?id=' + id;
+const getImageUrl = (imagePath) => {
+    return pizza_backend_url + imagePath;
 };
 
 const StoreCard = (props) => {
     return (
         <Card className={"store-card"}>
-            <CardImg top width="100%" src={getImageUrl(props.storeInfo.id)}
+            <CardImg top width="100%" src={getImageUrl(props.storeInfo.imagePath)}
                      alt="Card image cap"/>
             <CardBody>
                 <CardTitle className={"store-card-title "}>{props.storeInfo.name}</CardTitle>

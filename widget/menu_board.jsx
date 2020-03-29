@@ -12,15 +12,11 @@ import {
 import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartPlus, faStar} from '@fortawesome/free-solid-svg-icons'
-import pizza_backend_url from "../utils/pizza_url";
+import {getImageUrl} from "../utils/pizza_url";
 import PizzaSpinner from "./spinner";
 import Hover from "./hover";
 import MenuModal from "./menu_modal";
 import PizzaChart from "./shop_cart";
-
-const getImageUrl = (name) => {
-    return pizza_backend_url + '/toppings/image?name=' + name;
-};
 
 const MenuItem = (props) => {
     const [show, setShow] = useState(false);
@@ -29,7 +25,7 @@ const MenuItem = (props) => {
         <Card className={"pizza-menu-item"}>
             <CardHeader className={"text-uppercase text-center"}>
                 <div className={"float-left"}>
-                    {props.topping.name}
+                    {props.topping.title}
                 </div>
                 {
                     props.topping.isPremium &&
@@ -38,7 +34,7 @@ const MenuItem = (props) => {
                     </Hover>
                 }
             </CardHeader>
-            <CardImg width="100%" src={getImageUrl(props.topping.name)} alt="Card image cap"/>
+            <CardImg width="100%" src={getImageUrl(props.topping.imagePath)} alt="Card image cap"/>
             <CardBody>
                 <CardText>
                     {props.topping.description}

@@ -19,15 +19,11 @@ import {
 
 import {GlutenFree} from "../icons/gluten-free";
 import {Accordion} from "react-bootstrap";
-import pizza_backend_url, {fetcher} from "../utils/pizza_url";
+import pizza_backend_url, {getImageUrl, fetcher} from "../utils/pizza_url";
 import SizeIcon from "./size_icon";
 import AmountPicker from "./amount_picker";
 import useSWR from "swr";
 import PizzaSpinner from "./spinner";
-
-const getImageUrl = (name) => {
-    return pizza_backend_url + '/crusts/image?name=' + name;
-};
 
 const MenuAccordion = (props) => {
     return (
@@ -58,14 +54,14 @@ const CrustItem = (props) => {
             <Card className={"pizza-menu-item"}>
                 <CardHeader className={"text-uppercase text-center"}>
                     <div className={"float-left"}>
-                        <Form.Check name="radio_crust" type="radio" label={props.crust.name.replace('_', ' ')}/>
+                        <Form.Check name="radio_crust" type="radio" label={props.crust.title}/>
                     </div>
                     {
                         props.crust.isGlutenFree &&
                         <GlutenFree className={"float-right"} words={"Gluten Free"}/>
                     }
                 </CardHeader>
-                <CardImg width="100%" src={getImageUrl(props.crust.name)} alt="Card image cap"/>
+                <CardImg width="100%" src={getImageUrl(props.crust.imagePath)} alt="Card image cap"/>
                 <CardBody>
                     <CardText className={"text-left"}>
                         {props.crust.description}
@@ -126,7 +122,7 @@ const MenuSize = (props) => {
             <MenuAccordion headText={"Choose Size"}>
                 {
                     sizeInfo.map((item) =>
-                        <SizeItem sizeData={item} key={item.tag}/>
+                        <SizeItem sizeData={item} key={item.name}/>
                     )
                 }
             </MenuAccordion>
