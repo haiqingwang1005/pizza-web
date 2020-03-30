@@ -286,7 +286,7 @@
     transform: translate(-50%, -50%);
 }
 
-/* amount picker */
+/* menu amount picker */
 .pizza-clickable {
     cursor: pointer;
 }
@@ -302,7 +302,7 @@
 }
 
 /* shop cart */
-.pizza-shop-cart {
+.pizza-shop-cart-sticker {
     border-radius: 2rem;
     position: fixed;
     bottom: 5vh;
@@ -315,7 +315,7 @@
     text-align: center;
 }
 
-.pizza-shop-cart-content {
+.pizza-shop-cart-sticker-content {
     margin: 0;
     position: absolute;
     top: 50%;
@@ -323,6 +323,16 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+/* empty cart*/
+.pizza-shop-cart-empty-container {
+    min-height: 70vh; /* These two lines are counted as one :-)       */
+}
+
+.pizza-shop-cart-empty-row {
+    margin-top: 3vh;
+}
+
 
 /* general style */
 .noselect {
@@ -333,5 +343,12 @@
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none;
     /* Non-prefixed version, currently
-                                     supported by Chrome, Opera and Firefox */
+       supported by Chrome, Opera and Firefox */
+}
+
+/* navigation */
+.nav-drop-link,
+.nav-drop-link:hover {
+    text-decoration: none !important;
+    color: black;
 }

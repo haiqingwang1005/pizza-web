@@ -16,7 +16,7 @@ import {getImageUrl} from "../utils/pizza_url";
 import PizzaSpinner from "./spinner";
 import Hover from "./hover";
 import MenuModal from "./menu_modal";
-import PizzaChart from "./shop_cart";
+import PizzaChartSticker from "./shop_cart_sticker";
 
 const MenuItem = (props) => {
     const [show, setShow] = useState(false);
@@ -106,7 +106,7 @@ const MenuBoard = (props) => {
         const categorized = categorizeToppings(toppingsInfo);
         return (
             <div>
-                <PizzaChart/>
+                <PizzaChartSticker/>
                 {
                     categorized.map((item) => {
                         return <MenuSection toppings={item.toppings}

@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 const pizza_backend_url = "http://localhost:9080/haiqingpizza";
 export const copy_right_url = "https://github.com/haiqingwang1005";
 export default pizza_backend_url;
@@ -7,15 +9,29 @@ export function fetcher(url) {
         return r.json();
     });
 }
+
+export function fetcherWithToken(path) {
+    const token = Cookies.get('token');
+    if (token) {
+        return pizzaFetch(path, 'GET', {'Authorization': 'Bearer ' + token});
+    } else {
+        return new Promise((resolve, reject) => {
+            reject({error: 'no token'});
+        });
+    }
+}
+
 export function getImageUrl(imagePath) {
     return pizza_backend_url + imagePath
 }
 
-function pizzaRequest(path, verb, header, body, isCredential, handleSuccess, handleFail, handleError) {
+function pizzaFetch(path, verb, header, body, isCredential, handleSuccess, handleFail, handleError) {
     const initObj = {};
     initObj.method = verb;
     initObj.mode = 'cors';
-    initObj.headers = header;
+    if (header) {
+        initObj.headers = header;
+    }
     if (body) {
         initObj.body = JSON.stringify(body);
     }
@@ -23,7 +39,7 @@ function pizzaRequest(path, verb, header, body, isCredential, handleSuccess, han
         initObj.credentials = 'include'
     }
 
-    fetch(
+    return fetch(
         pizza_backend_url + path, initObj)
         .then((response) => {
             const statusPromise = new Promise((resolve, reject) => {
@@ -44,8 +60,14 @@ function pizzaRequest(path, verb, header, body, isCredential, handleSuccess, han
                     handleFail(status, data);
                 }
             }
-            return data;
-        })
+            return new Promise((resolve, reject) => {
+                resolve({response: data, status: status});
+            });
+        });
+}
+
+function pizzaRequest(path, verb, header, body, isCredential, handleSuccess, handleFail, handleError) {
+    pizzaFetch(path, verb, header, body, isCredential, handleSuccess, handleFail, handleError)
         .catch((error) => {
             if (typeof handleError === "function") {
                 handleError(error);

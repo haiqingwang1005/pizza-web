@@ -2,6 +2,7 @@ import '../public/css/style.css';
 
 import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 import {
     Collapse,
@@ -18,93 +19,100 @@ import {
 } from 'reactstrap';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPizzaSlice} from '@fortawesome/free-solid-svg-icons'
-import {pizzaGetRequest} from "../utils/pizza_url";
-import {useCookies} from "react-cookie";
+import {fetcherWithToken} from "../utils/pizza_url";
+import useSWR from "swr";
+import Router from "next/router";
 
-const NamePlace = (props) => {
-    const [name, setName] = useState('');
-    useEffect(() => {
-        pizzaGetRequest('/profile', props.token,
-            (status, data) => {
-                console.log(data.firstname);
-                setName(data.firstname);
-            },
-            (status, data) => {
-                console.error(`fail to get name ${data}`);
-            },
-            (error) => {
-                console.error(error);
-            });
-    });
+const signOut = () => {
+    console.log('sign out');
+    Cookies.remove('token');
+    Router.push('/');
+};
 
+const getFirstName = () => {
+    const {data, error} = useSWR('/profile', fetcherWithToken);
+    if (error) {
+        return undefined;
+    }
+    if (data && data.status === 200) {
+        return data.response.firstname;
+    } else {
+        return undefined;
+    }
+};
+
+const UserDropdown = (props) => {
     return (
-        <span>
-            {`Hello, ${name}`}
-        </span>
+        <UncontrolledDropdown nav inNavbar>
+            <DropdownToggle nav caret>
+                <span>
+                    {`Hello, ${props.name}`}
+                </span>
+            </DropdownToggle>
+            <DropdownMenu right>
+                <DropdownItem>
+                    <Link href={"/cart"}>
+                        <a className={"nav-drop-link"}>Shop Cart</a>
+                    </Link>
+                </DropdownItem>
+                <DropdownItem>
+                    <Link href={"/"}>
+                        <a className={"nav-drop-link"}>My Orders</a>
+                    </Link>
+                </DropdownItem>
+                <DropdownItem divider/>
+                <DropdownItem onClick={signOut}>
+                    Sign out
+                </DropdownItem>
+            </DropdownMenu>
+        </UncontrolledDropdown>
     );
 };
 
-const UserNav = (props) => {
-    if (props.token) {
+const AnonymousDropdown = (props) => {
+    return (
+        <UncontrolledDropdown nav inNavbar>
+            <DropdownToggle nav caret>
+                Please sign in
+            </DropdownToggle>
+            <DropdownMenu right>
+                <DropdownItem>
+                    <Link href="/login">
+                        <a className={"nav-drop-link"}>Sign in</a>
+                    </Link>
+                </DropdownItem>
+                <DropdownItem>
+                    <Link href="/signup">
+                        <a className={"nav-drop-link"}>Sign up</a>
+                    </Link>
+                </DropdownItem>
+            </DropdownMenu>
+        </UncontrolledDropdown>
+    );
+};
+
+const PizzaNavDropdown = (props) => {
+    const [name, setName] = useState();
+
+    const firstname = getFirstName();
+    useEffect(() => {
+        setName(firstname);
+    });
+
+    if (name) {
         return (
-            <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                    <NamePlace token={props.token}/>
-                </DropdownToggle>
-                <DropdownMenu right>
-                    <DropdownItem>
-                        <Link href={"/"}>
-                            <a>Shop Cart</a>
-                        </Link>
-                    </DropdownItem>
-                    <DropdownItem>
-                        <Link href={"/"}>
-                            <a>My Orders</a>
-                        </Link>
-                    </DropdownItem>
-                    <DropdownItem divider/>
-                    <DropdownItem onClick={() => {
-                        console.log('sign out');
-                        props.remove('token');
-                    }}>
-                        Sign out
-                    </DropdownItem>
-                </DropdownMenu>
-            </UncontrolledDropdown>
+            <UserDropdown name={name}/>
         );
     } else {
         return (
-            <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                    Please sign in
-                </DropdownToggle>
-                <DropdownMenu right>
-                    <DropdownItem>
-                        <Link href="/login">
-                            <a>Sign in</a>
-                        </Link>
-                    </DropdownItem>
-                    <DropdownItem>
-                        <Link href="/signup">
-                            <a>Sign up</a>
-                        </Link>
-                    </DropdownItem>
-                </DropdownMenu>
-            </UncontrolledDropdown>
+            <AnonymousDropdown/>
         );
     }
 };
 
 const PizzaNav = (props) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [token, setToken] = useState(undefined);
     const toggle = () => setIsOpen(!isOpen);
-
-    const [cookies, setCookie, removeCookie] = useCookies(['token']);
-
-    useEffect(() => {
-        setToken(cookies.token);
-    });
 
     return (
         <div>
@@ -127,7 +135,7 @@ const PizzaNav = (props) => {
                                 <NavLink>Menu</NavLink>
                             </Link>
                         </NavItem>
-                        <UserNav token={token} remove={removeCookie}/>
+                        <PizzaNavDropdown/>
                     </Nav>
                 </Collapse>
             </Navbar>
