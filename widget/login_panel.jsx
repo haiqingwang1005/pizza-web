@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 import Link from "next/link";
 import sanitize from "../utils/sanitize";
-import {pizzaPostRequest} from "../utils/pizza_url";
+import {generateRedirectParams, pizzaPostRequest} from "../utils/pizza_url";
 import {FailTitle} from "./login_alert";
 import Router from 'next/router'
 
@@ -43,7 +43,11 @@ const LoginPanel = (props) => {
             (status, data) => {
                 console.log('Login successfully');
                 setLoginFail({isFailed: false, message: ''});
-                Router.push('/welcome');
+                if (props.redirect) {
+                    Router.push(props.redirect);
+                } else {
+                    Router.push('/welcome');
+                }
             },
             (status, data) => {
                 console.log('Login error');
@@ -101,7 +105,7 @@ const LoginPanel = (props) => {
                                     Sign in
                                 </Button>
                                 <div className="text-center">
-                                    <Link href="/signup">
+                                    <Link href={`/signup?${generateRedirectParams(props.redirect)}`} >
                                         <a className="small">New Customer?</a>
                                     </Link>
                                 </div>

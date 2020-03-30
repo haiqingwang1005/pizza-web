@@ -2,8 +2,6 @@ import '../public/css/style.css';
 
 import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
-import Cookies from 'js-cookie';
-
 import {
     Collapse,
     Navbar,
@@ -19,18 +17,13 @@ import {
 } from 'reactstrap';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPizzaSlice} from '@fortawesome/free-solid-svg-icons'
-import {fetcherWithToken} from "../utils/pizza_url";
+import {default_path, fetcherWithToken} from "../utils/pizza_url";
 import useSWR from "swr";
 import Router from "next/router";
+import { useCookies } from 'react-cookie'
 
-const signOut = () => {
-    console.log('sign out');
-    Cookies.remove('token');
-    Router.push('/');
-};
-
-const getFirstName = () => {
-    const {data, error} = useSWR('/profile', fetcherWithToken);
+const getFirstName = (token) => {
+    const {data, error} = useSWR(['/profile', token], fetcherWithToken);
     if (error) {
         return undefined;
     }
@@ -61,7 +54,7 @@ const UserDropdown = (props) => {
                     </Link>
                 </DropdownItem>
                 <DropdownItem divider/>
-                <DropdownItem onClick={signOut}>
+                <DropdownItem onClick={props.signOut}>
                     Sign out
                 </DropdownItem>
             </DropdownMenu>
@@ -92,16 +85,30 @@ const AnonymousDropdown = (props) => {
 };
 
 const PizzaNavDropdown = (props) => {
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+
     const [name, setName] = useState();
 
-    const firstname = getFirstName();
+    const firstname = getFirstName(cookies.token);
     useEffect(() => {
         setName(firstname);
     });
 
+    const signOut = () => {
+        console.log('sign out');
+        removeCookie('token');
+        setName(undefined);
+        if (default_path === Router.pathname) {
+            window.location.href = Router.pathname;
+        } else {
+            Router.push('/welcome');
+        }
+
+    };
+
     if (name) {
         return (
-            <UserDropdown name={name}/>
+            <UserDropdown name={name} signOut={signOut}/>
         );
     } else {
         return (

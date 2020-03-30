@@ -1,8 +1,9 @@
 import Cookies from 'js-cookie';
-
+import { useCookies } from 'react-cookie'
 const pizza_backend_url = "http://localhost:9080/haiqingpizza";
 export const copy_right_url = "https://github.com/haiqingwang1005";
 export default pizza_backend_url;
+export const default_path = '/welcome';
 
 export function fetcher(url) {
     return fetch(url).then(r => {
@@ -10,8 +11,8 @@ export function fetcher(url) {
     });
 }
 
-export function fetcherWithToken(path) {
-    const token = Cookies.get('token');
+export function fetcherWithToken(path, token) {
+    //const token = Cookies.get('token');
     if (token) {
         return pizzaFetch(path, 'GET', {'Authorization': 'Bearer ' + token});
     } else {
@@ -101,4 +102,12 @@ export function pizzaPostRequest(path, bodyObj, handleSuccess, handleFail, handl
         handleFail,
         handleError
     );
+}
+
+export const redirectKey = 'redirectTo';
+export function generateRedirectParams(dest) {
+    if (dest) {
+        return `redirectTo=${dest.replace('/', '%2F')}`;
+    }
+    return '';
 }
