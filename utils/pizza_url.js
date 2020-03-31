@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie';
-import { useCookies } from 'react-cookie'
 const pizza_backend_url = "http://localhost:9080/haiqingpizza";
 export const copy_right_url = "https://github.com/haiqingwang1005";
 export default pizza_backend_url;
@@ -12,7 +10,6 @@ export function fetcher(url) {
 }
 
 export function fetcherWithToken(path, token) {
-    //const token = Cookies.get('token');
     if (token) {
         return pizzaFetch(path, 'GET', {'Authorization': 'Bearer ' + token});
     } else {

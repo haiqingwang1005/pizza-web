@@ -1,3 +1,4 @@
+
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
 :root {
@@ -331,6 +332,15 @@
 
 .pizza-shop-cart-empty-row {
     margin-top: 3vh;
+}
+
+/* shop cart card */
+.pizza-shop-card-card {
+    margin-top: 3vh;
+}
+
+.pizza-shop-cart-amount-picker {
+    max-width: 10vh;
 }
 
 

@@ -15,12 +15,15 @@ const CartBoard = (props) => {
         return (
             <EmptyCart/>
         );
+    } else if (data.status === 200) {
+        return <CartPanel cartItems={data.response}/>
     } else if (data.status === 401 || data.status === 403) {
         console.info('Not authorized.');
         Router.push('/login');
         return <div/>
     } else {
-        return <CartPanel/>
+        Router.push('/welcome');
+        return <div/>
     }
 };
 

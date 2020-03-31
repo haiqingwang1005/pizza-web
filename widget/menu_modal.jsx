@@ -54,7 +54,13 @@ const CrustItem = (props) => {
             <Card className={"pizza-menu-item"}>
                 <CardHeader className={"text-uppercase text-center"}>
                     <div className={"float-left"}>
-                        <Form.Check name="radio_crust" type="radio" label={props.crust.title}/>
+                        <Form.Check
+                            name="radio_crust"
+                            type="radio"
+                            onChange={()=> {
+                                console.log(props.crust.name);
+                            }}
+                            label={props.crust.title}/>
                     </div>
                     {
                         props.crust.isGlutenFree &&
@@ -142,6 +148,10 @@ const MenuModal = (props) => {
     let show = props.show;
     const onHide = props.onHide;
 
+    const addToCart = () => {
+        onHide();
+    };
+
     return (
         <div>
             <Modal show={show} onHide={onHide} size={"xl"}>
@@ -152,7 +162,7 @@ const MenuModal = (props) => {
                     <MenuNumber/>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button color="primary" onClick={onHide}>Add to Chart</Button>{' '}
+                    <Button color="primary" onClick={addToCart}>Add to Chart</Button>{' '}
                     <Button color="secondary" onClick={onHide}>Cancel</Button>
                 </Modal.Footer>
             </Modal>

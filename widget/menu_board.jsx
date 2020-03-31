@@ -16,11 +16,10 @@ import {getImageUrl} from "../utils/pizza_url";
 import PizzaSpinner from "./spinner";
 import Hover from "./hover";
 import MenuModal from "./menu_modal";
-import PizzaChartSticker from "./shop_cart_sticker";
+import PizzaCartSticker from "./shop_cart_sticker";
 
 const MenuItem = (props) => {
     const [show, setShow] = useState(false);
-
     return (
         <Card className={"pizza-menu-item"}>
             <CardHeader className={"text-uppercase text-center"}>
@@ -106,7 +105,7 @@ const MenuBoard = (props) => {
         const categorized = categorizeToppings(toppingsInfo);
         return (
             <div>
-                <PizzaChartSticker/>
+                <PizzaCartSticker/>
                 {
                     categorized.map((item) => {
                         return <MenuSection toppings={item.toppings}

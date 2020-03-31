@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faShoppingCart} from '@fortawesome/free-solid-svg-icons'
 import { motion } from 'framer-motion';
 
-const PizzaChartSticker = (props) => {
+const PizzaCartSticker = (props) => {
     return (
         <motion.div className={"pizza-shop-cart-sticker"}
                     whileHover={{ scale: 1.1 }}
@@ -17,4 +17,4 @@ const PizzaChartSticker = (props) => {
     );
 };
 
-export default PizzaChartSticker;
+export default PizzaCartSticker;

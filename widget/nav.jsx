@@ -16,11 +16,11 @@ import {
     DropdownItem,
 } from 'reactstrap';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPizzaSlice} from '@fortawesome/free-solid-svg-icons'
+import {faPizzaSlice, faSignOutAlt, faClipboard, faShoppingCart} from '@fortawesome/free-solid-svg-icons'
 import {default_path, fetcherWithToken} from "../utils/pizza_url";
 import useSWR from "swr";
 import Router from "next/router";
-import { useCookies } from 'react-cookie'
+import {useCookies} from 'react-cookie'
 
 const getFirstName = (token) => {
     const {data, error} = useSWR(['/profile', token], fetcherWithToken);
@@ -45,17 +45,23 @@ const UserDropdown = (props) => {
             <DropdownMenu right>
                 <DropdownItem>
                     <Link href={"/cart"}>
-                        <a className={"nav-drop-link"}>Shop Cart</a>
+                        <div>
+                            <FontAwesomeIcon icon={faShoppingCart}/>{' '}
+                            <a className={"nav-drop-link"}>Shop Cart</a>
+                        </div>
                     </Link>
                 </DropdownItem>
                 <DropdownItem>
                     <Link href={"/"}>
-                        <a className={"nav-drop-link"}>My Orders</a>
+                        <div>
+                            <FontAwesomeIcon icon={faClipboard}/>{'  '}
+                            <a className={"nav-drop-link"}>My Orders</a>
+                        </div>
                     </Link>
                 </DropdownItem>
                 <DropdownItem divider/>
                 <DropdownItem onClick={props.signOut}>
-                    Sign out
+                    <FontAwesomeIcon icon={faSignOutAlt}/> Sign out
                 </DropdownItem>
             </DropdownMenu>
         </UncontrolledDropdown>
