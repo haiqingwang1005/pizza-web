@@ -19,11 +19,20 @@ import sanitize from "../utils/sanitize";
 import {generateRedirectParams, pizzaPostRequest} from "../utils/pizza_url";
 import {FailTitle} from "./login_alert";
 import Router from 'next/router'
-
+import {useCookies} from 'react-cookie'
 
 const LoginPanel = (props) => {
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
     let [loginFail, setLoginFail] = useState({isFailed: false, message: ''});
+    let [token, setToken] = useState(undefined);
+
+    if (token) {
+        console.log('set token now');
+        setCookie('token', token, {
+            path: '/'
+        });
+    }
 
     const inputUsername = React.createRef();
     const inputPassword = React.createRef();
@@ -42,6 +51,7 @@ const LoginPanel = (props) => {
             body,
             (status, data) => {
                 console.log('Login successfully');
+                setToken(data.token);
                 setLoginFail({isFailed: false, message: ''});
                 if (props.redirect) {
                     Router.push(props.redirect);
