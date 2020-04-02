@@ -328,6 +328,11 @@
     font-family: sans-serif;
     color: orange;
 }
+
+.pizza-shop-cart-trash {
+    cursor: pointer;
+}
+
 /* empty cart*/
 .pizza-shop-cart-empty-container {
     min-height: 70vh; /* These two lines are counted as one :-)       */

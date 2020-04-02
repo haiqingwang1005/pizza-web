@@ -16,10 +16,12 @@ import {
     Button
 } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faShoppingBag, faDollarSign} from '@fortawesome/free-solid-svg-icons'
+import {faShoppingBag, faDollarSign, faTrash} from '@fortawesome/free-solid-svg-icons'
 import {useCookies} from 'react-cookie'
 import {pizzaDeleteWithToken, pizzaPutWithToken} from "../utils/pizza_url";
 import {isCartEmpty, parseGetCartResponse} from "../utils/cart_paser";
+import Link from "next/link";
+import Hover from "./hover";
 
 const PizzaItem = (props) => {
     const pizza = props.item.pizza;
@@ -88,11 +90,12 @@ const PizzaItem = (props) => {
                                 </DropdownToggle>
                                 <DropdownMenu>
                                     <DropdownItem onClick={() => onPick(0, pizza)}>0 (Delete)</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(1, pizza)}>1</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(2, pizza)}>2</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(3, pizza)}>3</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(4, pizza)}>4</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(5, pizza)}>5</DropdownItem>
+                                    {
+                                        Array.from(Array(9).keys()).map((item) => {
+                                            const num = item + 1;
+                                            return <DropdownItem onClick={() => onPick(num, pizza)}>{num}</DropdownItem>
+                                        })
+                                    }
                                 </DropdownMenu>
                             </ButtonDropdown>
                         </div>
@@ -143,14 +146,21 @@ const CartPanel = (props) => {
                 <Card className={"pizza-shop-card-card"}>
                     <CardHeader>
                         <FontAwesomeIcon icon={faShoppingBag}/>{' '}My Shopping Cart
+                        <span className={"float-right pizza-shop-cart-trash"} onClick={deleteAll}>
+                            <Hover words={"Clear Cart"}>
+                                <FontAwesomeIcon icon={faTrash}/>
+                            </Hover>
+                        </span>
                     </CardHeader>
                     <CardBody>
                         <PizzaPanel pizzas={props.cartItems.pizzas} setUpdateCart={props.setUpdateCart}/>
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={deleteAll}>
-                            Delete All
-                        </Button>
+                        <Link href={"/checkout"}>
+                            <Button className={"float-center"}>
+                                Checkout
+                            </Button>
+                        </Link>
                     </CardFooter>
                 </Card>
             </Col>
