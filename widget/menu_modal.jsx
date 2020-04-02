@@ -1,5 +1,5 @@
 import '../public/css/style.css';
-import React from "react";
+import React, {useState} from "react";
 import {
     Button,
     Card,
@@ -19,11 +19,13 @@ import {
 
 import {GlutenFree} from "../icons/gluten-free";
 import {Accordion} from "react-bootstrap";
-import pizza_backend_url, {getImageUrl, fetcher} from "../utils/pizza_url";
+import pizza_backend_url, {getImageUrl, fetcher, pizzaPostWithToken} from "../utils/pizza_url";
 import SizeIcon from "./size_icon";
 import AmountPicker from "./amount_picker";
 import useSWR from "swr";
 import PizzaSpinner from "./spinner";
+import {useCookies} from "react-cookie";
+import {getCartSize} from "../utils/cart_paser";
 
 const MenuAccordion = (props) => {
     return (
@@ -57,8 +59,9 @@ const CrustItem = (props) => {
                         <Form.Check
                             name="radio_crust"
                             type="radio"
-                            onChange={()=> {
+                            onChange={() => {
                                 console.log(props.crust.name);
+                                props.setCrustName(props.crust.name);
                             }}
                             label={props.crust.title}/>
                     </div>
@@ -92,7 +95,7 @@ const MenuCrust = (props) => {
                 {
                     crustInfo.map((item) => {
                         return (
-                            <CrustItem crust={item} key={item.name}/>
+                            <CrustItem crust={item} key={item.name} setCrustName={props.setCrustName}/>
                         );
                     })
                 }
@@ -105,7 +108,14 @@ const SizeItem = (props) => {
     return (
         <Col md="12" lg="4">
             <Form.Check>
-                <Form.Check.Input type={"radio"} name="radio_size"/>
+                <Form.Check.Input
+                    type={"radio"}
+                    name="radio_size"
+                    onChange={() => {
+                        console.log(props.sizeData.name);
+                        props.setSizeName(props.sizeData.name);
+                    }}
+                />
                 <Form.Check.Label>
                     <SizeIcon sizeData={props.sizeData}/>
                 </Form.Check.Label>
@@ -128,7 +138,7 @@ const MenuSize = (props) => {
             <MenuAccordion headText={"Choose Size"}>
                 {
                     sizeInfo.map((item) =>
-                        <SizeItem sizeData={item} key={item.name}/>
+                        <SizeItem sizeData={item} key={item.name} setSizeName={props.setSizeName}/>
                     )
                 }
             </MenuAccordion>
@@ -139,8 +149,39 @@ const MenuSize = (props) => {
 const MenuNumber = (props) => {
     return (
         <MenuAccordion headText={"Choose Quantity"}>
-            <AmountPicker className={"pizza-amount-picker-body"}/>
+            <AmountPicker className={"pizza-amount-picker-body"} onChange={(val) => {
+                console.log(val);
+                props.setAmount(val);
+            }}/>
         </MenuAccordion>
+    );
+};
+
+
+const postItemToCart = (item, token, handleSuccess) => {
+    const body = {
+        "pizzaList":
+            [
+                {
+                    "crustName": item.crust,
+                    "number": item.amount,
+                    "sizeName": item.size,
+                    "toppingName": item.topping
+                },
+            ]
+    };
+
+    pizzaPostWithToken('/cart',
+        body,
+        token,
+        handleSuccess,
+        (status, data) => {
+            console.log('add fail');
+            console.log(data);
+        },
+        (error) => {
+            console.log('add error');
+        }
     );
 };
 
@@ -148,8 +189,32 @@ const MenuModal = (props) => {
     let show = props.show;
     const onHide = props.onHide;
 
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+    let [crustName, setCrustName] = useState(undefined);
+    let [sizeName, setSizeName] = useState(undefined);
+    let [amount, setAmount] = useState(undefined);
+
     const addToCart = () => {
-        onHide();
+        console.log('topping: ' + props.topping.name);
+        console.log('crust: ' + crustName);
+        console.log('size' + sizeName);
+        console.log('amount' + amount);
+
+        if (crustName && sizeName && amount) {
+            postItemToCart(
+                {
+                    topping: props.topping.name,
+                    crust: crustName,
+                    size: sizeName,
+                    amount: amount,
+                },
+                cookies.token,
+                (status, data) => {
+                    const cartSize = getCartSize(data);
+                    props.setCartSize(cartSize);
+                    onHide();
+                });
+        }
     };
 
     return (
@@ -157,9 +222,9 @@ const MenuModal = (props) => {
             <Modal show={show} onHide={onHide} size={"xl"}>
                 <Modal.Header onHide={onHide}>Let's Choose the Crust and Size </Modal.Header>
                 <Modal.Body>
-                    <MenuCrust/>
-                    <MenuSize/>
-                    <MenuNumber/>
+                    <MenuCrust setCrustName={setCrustName}/>
+                    <MenuSize setSizeName={setSizeName}/>
+                    <MenuNumber setAmount={setAmount}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button color="primary" onClick={addToCart}>Add to Chart</Button>{' '}

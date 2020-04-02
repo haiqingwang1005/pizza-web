@@ -55,7 +55,6 @@ function pizzaFetch(path, verb, header, body, isCredential, handleSuccess, handl
             const data = text.length === 0 ? {} : JSON.parse(text);
             if (status >= 200 && status < 300) {
                 if (typeof handleSuccess === 'function') {
-                    console.log(data);
                     handleSuccess(status, data);
                 }
             } else {
@@ -101,6 +100,50 @@ export function pizzaPostRequest(path, bodyObj, handleSuccess, handleFail, handl
         },
         bodyObj,
         true,
+        handleSuccess,
+        handleFail,
+        handleError
+    );
+}
+
+export function pizzaDeleteWithToken(path, token, handleSuccess, handleFail, handleError) {
+    pizzaRequest(path,
+        'DELETE',
+        {
+            'Authorization': 'Bearer ' + token
+        },
+        undefined,
+        false,
+        handleSuccess,
+        handleFail,
+        handleError
+    );
+}
+
+export function pizzaPostWithToken(path, bodyObj, token, handleSuccess, handleFail, handleError) {
+    pizzaRequest(path,
+        'POST',
+        {
+            'Content-Type': "application/json",
+            'Authorization': 'Bearer ' + token
+        },
+        bodyObj,
+        false,
+        handleSuccess,
+        handleFail,
+        handleError
+    );
+}
+
+export function pizzaPutWithToken(path, bodyObj, token, handleSuccess, handleFail, handleError) {
+    pizzaRequest(path,
+        'PUT',
+        {
+            'Content-Type': "application/json",
+            'Authorization': 'Bearer ' + token
+        },
+        bodyObj,
+        false,
         handleSuccess,
         handleFail,
         handleError

@@ -3,6 +3,7 @@ import {
     Card,
     CardBody,
     CardHeader,
+    CardFooter,
     Col,
     ListGroup,
     ListGroupItem,
@@ -11,21 +12,57 @@ import {
     ButtonDropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem
+    DropdownItem,
+    Button
 } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faShoppingBag, faDollarSign} from '@fortawesome/free-solid-svg-icons'
+import {useCookies} from 'react-cookie'
+import {pizzaDeleteWithToken, pizzaPutWithToken} from "../utils/pizza_url";
+import {isCartEmpty, parseGetCartResponse} from "../utils/cart_paser";
 
 const PizzaItem = (props) => {
-    console.log(props.item);
     const pizza = props.item.pizza;
-
+    const [cookies] = useCookies(['token']);
     const [isOpen, setOpen] = useState(false);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(props.item.number);
     const toggle = () => setOpen(!isOpen);
 
-    const onPick = (val) => {
+    const onPick = (val, pizza) => {
         setQuantity(val);
+        console.log(pizza);
+
+        const body = {
+            "pizzaList":
+                [
+                    {
+                        "pizzaId": pizza.id,
+                        'number': val
+                    },
+                ]
+        };
+
+        pizzaPutWithToken('/cart',
+            body,
+            cookies.token,
+            (status, data) => {
+                console.log('update');
+                console.log(data);
+                if (isCartEmpty(data)) {
+                    props.setUpdateCart('empty');
+                } else {
+                    props.setUpdateCart(data);
+                }
+
+            },
+            (status, data) => {
+                console.log('add fail');
+                console.log(data);
+            },
+            (error) => {
+                console.log('add error');
+            }
+        );
     };
     return (
         <ListGroupItem>
@@ -50,12 +87,12 @@ const PizzaItem = (props) => {
                                     Qty: {quantity}
                                 </DropdownToggle>
                                 <DropdownMenu>
-                                    <DropdownItem onClick={() => onPick(0)}>0 (Delete)</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(1)}>1</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(2)}>2</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(3)}>3</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(4)}>4</DropdownItem>
-                                    <DropdownItem onClick={() => onPick(5)}>5</DropdownItem>
+                                    <DropdownItem onClick={() => onPick(0, pizza)}>0 (Delete)</DropdownItem>
+                                    <DropdownItem onClick={() => onPick(1, pizza)}>1</DropdownItem>
+                                    <DropdownItem onClick={() => onPick(2, pizza)}>2</DropdownItem>
+                                    <DropdownItem onClick={() => onPick(3, pizza)}>3</DropdownItem>
+                                    <DropdownItem onClick={() => onPick(4, pizza)}>4</DropdownItem>
+                                    <DropdownItem onClick={() => onPick(5, pizza)}>5</DropdownItem>
                                 </DropdownMenu>
                             </ButtonDropdown>
                         </div>
@@ -73,7 +110,9 @@ const PizzaPanel = (props) => {
                 <ListGroupItem color={"warning"} className={"text-left"}>Pizzas</ListGroupItem>
                 {
                     pizzas.map((item) => {
-                        return <PizzaItem key={item.pizza.id} item={item}/>
+                        if (item.number > 0) {
+                            return <PizzaItem key={item.pizza.id} item={item} setUpdateCart={props.setUpdateCart}/>
+                        }
                     })
                 }
             </ListGroup>
@@ -81,8 +120,22 @@ const PizzaPanel = (props) => {
     );
 };
 
+
 const CartPanel = (props) => {
-    console.log(props.cartItems);
+    const [cookies] = useCookies(['token']);
+
+    const deleteAll = () => {
+        pizzaDeleteWithToken('/cart', cookies.token,
+            () => {
+                props.setUpdateCart('empty');
+            },
+            () => {
+                console.log('delete fail');
+            },
+            () => {
+                console.log('delete error');
+            });
+    };
 
     return (
         <Row>
@@ -92,8 +145,13 @@ const CartPanel = (props) => {
                         <FontAwesomeIcon icon={faShoppingBag}/>{' '}My Shopping Cart
                     </CardHeader>
                     <CardBody>
-                        <PizzaPanel pizzas={props.cartItems.pizzas}/>
+                        <PizzaPanel pizzas={props.cartItems.pizzas} setUpdateCart={props.setUpdateCart}/>
                     </CardBody>
+                    <CardFooter>
+                        <Button onClick={deleteAll}>
+                            Delete All
+                        </Button>
+                    </CardFooter>
                 </Card>
             </Col>
         </Row>
@@ -101,14 +159,3 @@ const CartPanel = (props) => {
 };
 
 export default CartPanel;
-
-/*
-
-
-
-                    <InputNumber prefix={"Quantity"} size={"sm"} defaultValue={1} max={99} min={0} className={"pizza-shop-cart-amount-picker"}/>
-
-<InputNumber defaultValue={1} max={99} min={0} className={"float-right pizza-shop-cart-amount-picker"}/>
-Quantity
- <NumericInput min={0} max={10} value={0} className={"pizza-shop-cart-amount-picker"}/>
- */

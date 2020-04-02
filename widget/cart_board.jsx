@@ -5,25 +5,31 @@ import React from "react";
 import CartPanel from "./cart_panel";
 
 const CartBoard = (props) => {
-    const data = props.cartData;
+    let data;
+    if (props.updateCart) {
+        data = props.updateCart;
+    } else {
+        data = props.cartData;
+    }
+
     if (!data) {
         return (
             <PizzaSpinner/>
         );
-    } else if (data.status === 404) {
+    } else if (data === 'empty') {
         console.info('Empty cart.');
         return (
             <EmptyCart/>
         );
-    } else if (data.status === 200) {
-        return <CartPanel cartItems={data.response}/>
-    } else if (data.status === 401 || data.status === 403) {
+    } else if (data === 'need_auth') {
         console.info('Not authorized.');
         Router.push('/login');
         return <div/>
-    } else {
+    } else if (data === 'error') {
         Router.push('/welcome');
         return <div/>
+    } else {
+        return <CartPanel cartItems={data} setUpdateCart={props.setUpdateCart}/>
     }
 };
 

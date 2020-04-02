@@ -4,17 +4,23 @@ import {faCaretLeft, faCaretRight} from '@fortawesome/free-solid-svg-icons'
 import {Col, Container, Row} from "reactstrap";
 
 const AmountPicker = (props) => {
+    const onChange = props.onChange;
 
     const [amount, setAmount] = useState(0);
     const minusOne = () => {
         if (amount === 0) {
+            onChange(0);
             return;
         }
-        setAmount(amount - 1);
+        const val = amount - 1;
+        setAmount(val);
+        onChange(val);
     };
 
     const plusOne = () => {
-        setAmount(amount + 1);
+        const val = amount + 1;
+        setAmount(val);
+        onChange(val);
     };
 
     return (

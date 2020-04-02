@@ -324,7 +324,10 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
-
+.pizza-shop-cart-sticker-digit {
+    font-family: sans-serif;
+    color: orange;
+}
 /* empty cart*/
 .pizza-shop-cart-empty-container {
     min-height: 70vh; /* These two lines are counted as one :-)       */

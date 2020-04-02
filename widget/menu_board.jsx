@@ -48,6 +48,7 @@ const MenuItem = (props) => {
             </CardFooter>
             <MenuModal show={show}
                        onHide={() => setShow(false)}
+                       setCartSize={props.setCartSize}
                        topping={props.topping}/>
         </Card>
     );
@@ -67,7 +68,7 @@ const MenuSection = (props) => {
                                 props.toppings.map((item) => {
                                     return (
                                         <Col sm="12" md="6" lg="4" key={item.name}>
-                                            <MenuItem topping={item}/>
+                                            <MenuItem topping={item} setCartSize={props.setCartSize}/>
                                         </Col>
                                     );
                                 })
@@ -98,6 +99,8 @@ const categorizeToppings = (toppings) => {
 };
 
 const MenuBoard = (props) => {
+    const [cartSize, setCartSize] = useState(undefined);
+
     const toppingsInfo = props.toppingsInfo;
     if (!toppingsInfo) {
         return (<PizzaSpinner/>);
@@ -105,12 +108,13 @@ const MenuBoard = (props) => {
         const categorized = categorizeToppings(toppingsInfo);
         return (
             <div>
-                <PizzaCartSticker/>
+                <PizzaCartSticker amount={cartSize}/>
                 {
                     categorized.map((item) => {
                         return <MenuSection toppings={item.toppings}
                                             key={item.key}
-                                            title={item.key}/>
+                                            title={item.key}
+                                            setCartSize={setCartSize}/>
                     })
                 }
 
